@@ -193,7 +193,7 @@ This part plots the kernels of the first subnetwork, the CNN network. for exampl
 
 <left> Kernel 0 </left>  | <center> Kernel 1 </center>
  :-------------------------:|:-------------------------:
-<img src="./parameter_experiments/Stride_length_resnet101/kernels_layer_0.png" width="400" height="800" />    <img src="./parameter_experiments/Stride_length_resnet101/kernels_layer_1.png" width="150" height="800" />
+<img src="./parameter_experiments/Stride_length_resnet101/kernels_layer_0.png" width="400" height="800" />  :|:  <img src="./parameter_experiments/Stride_length_resnet101/kernels_layer_1.png" width="150" height="800" />
 
 
 <br>
