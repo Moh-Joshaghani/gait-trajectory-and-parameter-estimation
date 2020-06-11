@@ -90,144 +90,6 @@ trajectory-estimation
 
 This section includes more detailed explanation about important parts of the project.
 
-### Dataset
-
-The dataset used to train and validate the network is a private dataset called *Vicon running dataset*. It contains the data from the study conducted with Martin Ullrich and Pascal Zobel. To access the dataset, please contact.
-
-
-
-### Trajectory Estimation and Gait Parameter Estimation
-
-The data gathered Accelerometers is not Ideal and suffers from noise. The Gyroscope data is also not suitable to be used in a standalone fashion as it drifts away from the true value. The Accelerometer and Gyroscope data should be fused in a way that mitigates this problem and returns the desired values. For this purpose we used a CNN-DNN Network.
-
-The Parameters to estimate is Stride length and Sole Angle and Impact Angle, and all other parameters available in the vicon_dataset.
-
-Besides, the network can also predict the trajectory. However, a CNN Fully connected architecture is not suitable for such a task, and as a result, at each time, only one of the followings can be estimatied: loc_x, loc_y, loc_z, orientation_x, orientation_y, orientation_z.
-
-
-
-
-
-### Model and Config File Format
-
-To feed the structure of the network, a .cfg file is required. This file, includes all the parameters of the model and settings in the training. This file, alone, completely explains everything about the test. 
-
-<br>
-
-
-**[input]**
-
-cw_len=256  *:length of the window over the data*
-batch_size=4 *: batch size in training*
-
-
-<br>
-
-
-**[cnn]** (*this part includes the config for the CNN layers.*)
-cnn_N_filt=32,64
-
-cnn_len_filt=30,15
-
-cnn_max_pool_len=2,2
-
-cnn_use_laynorm_inp=False
-
-cnn_use_batchnorm_inp=False
-
-cnn_use_laynorm=True,True
-
-cnn_use_batchnorm=False,False
-
-cnn_act=leaky_relu,leaky_relu
-
-cnn_drop=0.0,0.0,0.0
-
-cnn_freeze=False
-
-pt=none *:pretrained model*
-
-<br>
-
-**[core_network]** (*This part includes the information of the core network*)
-
-net_type=resnet101 *(from the set resnet18, resnet34, resnet50, resnet101, identity)*
-
-<br>
-
-
-**[regressor]** : (*The fully connected regressor network*)
-
-fc_lay=16  
-
-fc_drop=0.0
-
-fc_use_laynorm_inp=False
-
-fc_use_batchnorm_inp=False
-
-fc_use_batchnorm=False
-
-fc_use_laynorm=False
-
-fc_act=leaky_relu
-
-<br>
-
-
-**[simulation]**
-
-Augmentation=False
-
-num_aug=3
-
-estimate_trajectory=False
-cost_function=MSELoss
-
-<br>
-<br>
-
-
-
-### Data Pre-processing and train-test data split
-
-Due to the end-to-end nature of the task, no preprocessing is done on the data, except some minor changes to make sure the data is meaningful. One input data sample is as followed:
-
-<br>
-
-<center> One input sample </center>
-
-<p align="center">
-
-<img src="./parameter_experiments/Multi_label_resnet101/outputs/random_sample.png"  />
-
-</p>
-
-<br>
-
-The following changes has been done to the data:
-
-- The location data, which is the target value for the trajetory estimation task, are set to zero at the beginning of each stride.
-
-- The sensor data is normalized. The Accelerometer data is divided by 12*g and gyroscope data is divided by 2000 (This information is provided by the dataset and is an standard approach to use the sensor data and normalize with respect to the sensor range).
-
-The train-test split is performed based on subjects. The subjects in the test and train set do not overlap. The default validation size is 0.2 percent, and overall, there are 1020 training data and 183 test samples.
-
-<br>
-
-
-### Training
-
-The configuration of the network is read from the .cfg file elaborated in the Model and Config File Format section. 
-Adam with initial learning rate of 0.001 as well as the defined loss function is used to train the network. The network is trained for some defined maximum epochs (default 200), and the intermediate models are saved in the experiment/{run date}/model subdirectory.
-
-<br>
-
-### Evaluation
-After *save_frequency* epochs of training, the model is evaluated and the results are saved in res.txt file, and the loss and accuracy is also plotted. The evaluation is done on subjects that has not been seen by the network.
-
-
-<br>
 
 ## Outputs
 Here some outputs of trajectory and parameter estimation tasks are available.
@@ -253,14 +115,28 @@ Prediction Epoch 0, 70 and 125
 **Predictions outputs for Trajectory estimation task**
 This part includes the prediction of the network over the same input through training. some examples are:
 
+<br>
 
 Prediction Epoch 0, 30 and 90
 
-<img align="left" title="Epoch 0" src="./trajectory_experiments/resnet101/outputs/predictions_epoch_0.png" />
-<img align="center" src="./trajectory_experiments/resnet101/outputs/predictions_epoch_30.png"  width="400" height="400"/><img  align="right" src="./trajectory_experiments/resnet101/outputs/predictions_epoch_90.png" width="400" height="400"/>
+<br>
+<br>
+
+
+<img align="center" title="Epoch 0" src="./trajectory_experiments/resnet101/outputs/predictions_epoch_0.png" width="400" height="400"/>
+
+<img align="center" src="./trajectory_experiments/resnet101/outputs/predictions_epoch_30.png"  width="400" height="400"/>
+
+<img  align="center" src="./trajectory_experiments/resnet101/outputs/predictions_epoch_90.png" width="400" height="400"/>
 
 
 
+
+<br>
+
+<br>
+
+<br>
 
 **res.txt**
 Complete analysis of Network performance after each validation epoch. It includes test and train loss values, MAE (mean Absolute Error) and standard deviation of predictions. It includes all information required to analyse the Network performance. The format is as follows:
@@ -333,6 +209,149 @@ Train and Validation loss is also plotted as following:
 
 
 <br/>
+
+
+### Dataset
+
+The dataset used to train and validate the network is a private dataset called *Vicon running dataset*. It contains the data from the study conducted with Martin Ullrich and Pascal Zobel. To access the dataset, please contact.
+
+
+
+### Trajectory Estimation and Gait Parameter Estimation
+
+The data gathered Accelerometers is not Ideal and suffers from noise. The Gyroscope data is also not suitable to be used in a standalone fashion as it drifts away from the true value. The Accelerometer and Gyroscope data should be fused in a way that mitigates this problem and returns the desired values. For this purpose we used a CNN-DNN Network.
+
+The Parameters to estimate is Stride length and Sole Angle and Impact Angle, and all other parameters available in the vicon_dataset.
+
+Besides, the network can also predict the trajectory. However, a CNN Fully connected architecture is not suitable for such a task, and as a result, at each time, only one of the followings can be estimatied: loc_x, loc_y, loc_z, orientation_x, orientation_y, orientation_z.
+
+
+
+
+
+### Model and Config File Format
+
+To feed the structure of the network, a .cfg file is required. This file, includes all the parameters of the model and settings in the training. This file, alone, completely explains everything about the test. 
+
+<br>
+
+
+**[input]**
+
+cw_len=256  *:length of the window over the data*
+
+batch_size=4 *: batch size in training*
+
+
+<br>
+
+
+**[cnn]** (*this part includes the config for the CNN layers.*)
+
+cnn_N_filt=32,64
+
+cnn_len_filt=30,15
+
+cnn_max_pool_len=2,2
+
+cnn_use_laynorm_inp=False (* Note: you should either use layer norm or batch norm)
+
+cnn_use_batchnorm_inp=False
+
+cnn_use_laynorm=True,True
+
+cnn_use_batchnorm=False,False
+
+cnn_act=leaky_relu,leaky_relu
+
+cnn_drop=0.0,0.0,0.0
+
+cnn_freeze=False
+
+pt=none *:pretrained model*
+
+<br>
+
+**[core_network]** (*This part includes the information of the core network*)
+
+net_type=resnet101 *(from the set resnet18, resnet34, resnet50, resnet101, identity)*
+
+<br>
+
+
+**[regressor]** : (*The fully connected regressor network*)
+
+fc_lay=16  
+
+fc_drop=0.0
+
+fc_use_laynorm_inp=False
+
+fc_use_batchnorm_inp=False
+
+fc_use_batchnorm=False
+
+fc_use_laynorm=False
+
+fc_act=leaky_relu
+
+<br>
+
+
+**[simulation]**
+
+Augmentation=False
+
+num_aug=3
+
+estimate_trajectory=False
+
+cost_function=MSELoss (from the set MSELOSS, SmoothL1Loss, L1Loss)
+
+<br>
+<br>
+
+
+
+### Data Pre-processing and train-test data split
+
+Due to the end-to-end nature of the task, no preprocessing is done on the data, except some minor changes to make sure the data is meaningful. One input data sample is as followed:
+
+<br>
+
+<center> One input sample </center>
+
+<p align="center">
+
+<img src="./parameter_experiments/Multi_label_resnet101/outputs/random_sample.png"  />
+
+</p>
+
+<br>
+
+The following changes has been done to the data:
+
+- The location data, which is the target value for the trajetory estimation task, are set to zero at the beginning of each stride.
+
+- The sensor data is normalized. The Accelerometer data is divided by 12*g and gyroscope data is divided by 2000 (This information is provided by the dataset and is an standard approach to use the sensor data and normalize with respect to the sensor range).
+
+The train-test split is performed based on subjects. The subjects in the test and train set do not overlap. The default validation size is 0.2 percent, and overall, there are 1020 training data and 183 test samples.
+
+<br>
+
+
+### Training
+
+The configuration of the network is read from the .cfg file elaborated in the Model and Config File Format section. 
+Adam with initial learning rate of 0.001 as well as the defined loss function is used to train the network. The network is trained for some defined maximum epochs (default 200), and the intermediate models are saved in the experiment/{run date}/model subdirectory.
+
+<br>
+
+### Evaluation
+After *save_frequency* epochs of training, the model is evaluated and the results are saved in res.txt file, and the loss and accuracy is also plotted. The evaluation is done on subjects that has not been seen by the network.
+
+
+<br>
 
 
 ### Future Work
