@@ -367,5 +367,5 @@ The project is done by [Mohammad Joshaghani](https://github.com/moh.j).
 
 
 ## Acknowledgments
-I would like to thank [Angel Villar Coralles](https://github.com/angelvillar96) as a friend helping out with programming problems.
+I would like to thank [Angel Villar Corrales](https://github.com/angelvillar96) as a friend helping out with programming problems.
 
