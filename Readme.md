@@ -92,7 +92,7 @@ This section includes more detailed explanation about important parts of the pro
 
 ### Dataset
 
-The dataset used to train and validate the network is a private dataset called *Vicon running dataset*. It contains the data from the study conducted with Martin Ullrich and Pascal Zobel. To access the dataset, please contact **markus.zrenner@fau.de**.
+The dataset used to train and validate the network is a private dataset called *Vicon running dataset*. It contains the data from the study conducted with Martin Ullrich and Pascal Zobel. To access the dataset, please contact.
 
 
 
@@ -348,5 +348,5 @@ The project is done by [Mohammad Joshaghani](https://github.com/moh.j).
 
 
 ## Acknowledgments
-I would like to thank [Markus Zrenner](https://www.mad.tf.fau.de/person/markus-zrenner/) for his helpful comments on the project as the supervisor of the project, and [Angel Villar Coralles](https://github.com/angelvillar96) as a Friend helping out with programming problems.
+I would like to thank [Angel Villar Coralles](https://github.com/angelvillar96) as a friend helping out with programming problems.
 
